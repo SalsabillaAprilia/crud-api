@@ -40,8 +40,7 @@ app.get('/', (req, res) => {
         Hapus produk (butuh token Bearer)
       </li>
     </ul>
-    <p>lakukan login untuk mendapatkan token Bearer</p>
-    <p>Silakan gunakan Postman untuk mencoba endpoint-endpoint di atas.</p>
+    <p>Jangan lupa login untuk mendapatkan token Bearer🙂</p>
   `);
 });
 
