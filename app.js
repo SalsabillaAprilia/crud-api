@@ -17,7 +17,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Tambahkan ini untuk halaman root "/"
 app.get('/', (req, res) => {
-  res.send('Node.js server aktif dan terhubung ke Railway!');
+  res.send(`
+    <h1>Node.js server aktif 🚀</h1>
+    <p>Berikut adalah beberapa endpoint yang tersedia:</p>
+    <ul>
+      <li><strong>POST</strong> /api/login<br/>
+        Body (JSON): { "email": "admin@gmail.com", "password": "123" }
+      </li>
+      <li><strong>GET</strong> /api/products<br/>
+        Lihat semua produk
+      </li>
+      <li><strong>GET</strong> /api/products/:id<br/>
+        Lihat detail produk berdasarkan ID
+      </li>
+      <li><strong>POST</strong> /api/products<br/>
+        Tambah produk baru (form-data, butuh token Bearer)
+      </li>
+      <li><strong>PUT</strong> /api/products/:id<br/>
+        Update produk (form-data, butuh token Bearer)
+      </li>
+      <li><strong>DELETE</strong> /api/products/:id<br/>
+        Hapus produk (butuh token Bearer)
+      </li>
+    </ul>
+    <p>lakukan login untuk mendapatkan token Bearer</p>
+    <p>Silakan gunakan Postman untuk mencoba endpoint-endpoint di atas.</p>
+  `);
 });
 
 const PORT = process.env.PORT || 8080;
