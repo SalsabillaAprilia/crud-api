@@ -1,5 +1,5 @@
 {
-  "name": "crud-auth",
+  "name": "crud-api-uas",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
