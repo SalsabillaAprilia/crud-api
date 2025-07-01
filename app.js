@@ -15,5 +15,10 @@ app.use('/api/products', productRoutes);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Tambahkan ini untuk halaman root "/"
+app.get('/', (req, res) => {
+  res.send('Node.js server aktif dan terhubung ke Railway!');
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
