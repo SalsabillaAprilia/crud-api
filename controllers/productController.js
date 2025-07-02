@@ -15,7 +15,7 @@ exports.create = (req, res) => {
       message: 'Product created',
       product: {
         ...newProduct,
-        gambar: gambar ? `http://localhost:3000/uploads/${gambar}` : null,
+        gambar: gambar ? `https://crud-api-production-1baf.up.railway.app/uploads/${gambar}` : null,
       },
     });
   });
@@ -29,7 +29,7 @@ exports.getAll = (req, res) => {
     // Tambahkan URL gambar
     const updated = products.map((p) => ({
       ...p,
-      gambar: p.gambar ? `http://localhost:3000/uploads/${p.gambar}` : null,
+      gambar: p.gambar ? `https://crud-api-production-1baf.up.railway.app/uploads/${p.gambar}` : null,
     }));
 
     res.json(updated);
@@ -45,7 +45,7 @@ exports.getOne = (req, res) => {
 
     const product = products[0];
     product.gambar = product.gambar
-      ? `http://localhost:3000/uploads/${product.gambar}`
+      ? `https://crud-api-production-1baf.up.railway.app/uploads/${product.gambar}`
       : null;
 
     res.json(product);
@@ -114,7 +114,7 @@ exports.remove = (req, res) => {
 
       // Hapus file gambar dari uploads/
       if (gambar) {
-        const filePath = path.join(__dirname, '..', 'uploads', gambar);
+        const filePath = path.join(__dirname, '..', 'public', 'uploads', gambar);
         fs.unlink(filePath, (err) => {
           if (err) console.warn('Gagal hapus gambar produk:', err.message);
         });
