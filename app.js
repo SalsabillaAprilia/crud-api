@@ -19,10 +19,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
   res.send(`
     <h1>Node.js server aktif 🚀</h1>
-    <p>Berikut adalah beberapa endpoint yang tersedia:</p>
+    <p>Berikut beberapa endpoint yang tersedia:</p>
     <ul>
       <li><strong>POST</strong> /api/login<br/>
-        Body (JSON): { "email": "admin@gmail.com", "password": "123" }
+        { "email": "admin@gmail.com", "password": "123" }
       </li>
       <li><strong>GET</strong> /api/products<br/>
         Lihat semua produk
@@ -40,7 +40,14 @@ app.get('/', (req, res) => {
         Hapus produk (butuh token Bearer)
       </li>
     </ul>
-    <p>Jangan lupa login untuk mendapatkan token Bearer🙂</p>
+    <p>Jangan lupa login untuk mendapatkan token Bearer 🙂</p>
+    <p>
+      📚 <strong>Untuk melihat dokumentasi API lengkap</strong><br/>
+      Silakan kunjungi: 
+      <a href="https://www.postman.com/spacecraft-engineer-50761124/api-railway-salsa/collection/hfejys0/crud-api-railway?action=share&creator=40611546" target="_blank">
+        Dokumentasi API di Postman
+      </a>
+    </p>
   `);
 });
 
