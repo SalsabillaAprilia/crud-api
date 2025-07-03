@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
       📚 <strong>Untuk melihat dokumentasi API lengkap</strong><br/>
       Silakan kunjungi: 
       <a href="https://www.postman.com/spacecraft-engineer-50761124/api-railway-salsa/collection/hfejys0/crud-api-railway?action=share&creator=40611546" target="_blank">
-        Dokumentasi API di Postman
+        API railway_salsa
       </a>
     </p>
   `);
