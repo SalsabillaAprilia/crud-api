@@ -1,11 +1,16 @@
 const Product = require('../models/productModel');
-const fs = require('fs');
-const path = require('path');
+const { cloudinary } = require('../config/cloudinary');
 
 //CREATE produk
 exports.create = (req, res) => {
   const { nama_produk, kategori, harga, detail, stok } = req.body;
-  const gambar = req.file ? req.file.filename : null;
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ message: 'Gambar produk wajib diunggah' });
+  }
+
+  const gambar = file.path; // Cloudinary akan otomatis isi path-nya
 
   const newProduct = { nama_produk, kategori, harga, gambar, detail, stok };
 
@@ -13,26 +18,17 @@ exports.create = (req, res) => {
     if (err) return res.status(500).json(err);
     res.status(201).json({
       message: 'Product created',
-      product: {
-        ...newProduct,
-        gambar: gambar ? `https://crud-api-production-1baf.up.railway.app/uploads/${gambar}` : null,
-      },
+      product: newProduct,
     });
   });
 };
+
 
 //GET semua produk
 exports.getAll = (req, res) => {
   Product.findAll((err, products) => {
     if (err) return res.status(500).json(err);
-
-    // Tambahkan URL gambar
-    const updated = products.map((p) => ({
-      ...p,
-      gambar: p.gambar ? `https://crud-api-production-1baf.up.railway.app/uploads/${p.gambar}` : null,
-    }));
-
-    res.json(updated);
+    res.json(products);
   });
 };
 
@@ -40,15 +36,9 @@ exports.getAll = (req, res) => {
 exports.getOne = (req, res) => {
   Product.findById(req.params.id, (err, products) => {
     if (err || products.length === 0) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: 'Produk tidak ditemukan' });
     }
-
-    const product = products[0];
-    product.gambar = product.gambar
-      ? `https://crud-api-production-1baf.up.railway.app/uploads/${product.gambar}`
-      : null;
-
-    res.json(product);
+    res.json(products[0]);
   });
 };
 
@@ -66,8 +56,9 @@ exports.getOne = (req, res) => {
   });
 
   // Tangani file gambar baru
-  if (req.file) {
-    updateData.gambar = req.file.filename;
+  const file = req.file;
+  if (file) {
+    updateData.gambar = file.path;
 
     // Hapus gambar lama
     Product.findById(id, (err, results) => {
@@ -76,9 +67,9 @@ exports.getOne = (req, res) => {
 
       const oldImage = results[0].gambar;
       if (oldImage) {
-        const filePath = path.join(__dirname, '..', 'public', 'uploads', oldImage);
-        fs.unlink(filePath, (err) => {
-          if (err) console.warn('Gagal hapus gambar lama:', err.message);
+        const publicId = oldImage.split('/').pop().split('.')[0]; // ambil ID dari URL
+        cloudinary.uploader.destroy(publicId, (error, result) => {
+          if (error) console.warn('Gagal hapus Cloudinary:', error.message);
         });
       }
 
@@ -105,18 +96,18 @@ exports.remove = (req, res) => {
   Product.findById(id, (err, results) => {
     if (err) return res.status(500).json(err);
     if (results.length === 0)
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: 'Produk tidak ditemukan' });
 
     const gambar = results[0].gambar;
 
     Product.delete(id, (err) => {
       if (err) return res.status(500).json(err);
 
-      // Hapus file gambar dari uploads/
+      // Hapus gambar di Cloudinary
       if (gambar) {
-        const filePath = path.join(__dirname, '..', 'public', 'uploads', gambar);
-        fs.unlink(filePath, (err) => {
-          if (err) console.warn('Gagal hapus gambar produk:', err.message);
+        const publicId = gambar.split('/').pop().split('.')[0];
+        cloudinary.uploader.destroy(publicId, (error, result) => {
+          if (error) console.warn('Gagal hapus Cloudinary:', error.message);
         });
       }
 
