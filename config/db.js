@@ -1,3 +1,6 @@
+console.log('ENV Check - Host:', process.env.DB_HOST);
+console.log('ENV Check - User:', process.env.DB_USER);
+console.log('ENV Check - DB:', process.env.DB_NAME);
 const mysql = require('mysql2');
 const conn = mysql.createConnection({
   host: process.env.DB_HOST,
